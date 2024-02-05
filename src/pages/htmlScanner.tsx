@@ -3,14 +3,16 @@ import { Button, Container, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import clsx from 'clsx';
 import { ArrowLeft } from 'react-bootstrap-icons';
+import { useWindowSize } from 'usehooks-ts';
 
-import Html5QrcodePlugin from 'src/components/HTMLBarCodeScanner';
+import HTMLBarCodeScanner from 'src/components/HTMLBarCodeScanner';
 
 import styles from './scanner.module.scss';
 
 const ScannerPage = () => {
-  const [barCode, setBarCode] = useState('');
+  const screenSize = useWindowSize();
   const navigate = useNavigate();
+  const [barCode, setBarCode] = useState('');
 
   const onNewScanResult = (decodedText: string) => {
     setBarCode(decodedText);
@@ -46,14 +48,11 @@ const ScannerPage = () => {
             />
           </div>
         </Container>
-        <div>
-          <Html5QrcodePlugin
-            fps={10}
-            qrbox={250}
-            disableFlip={false}
-            qrCodeSuccessCallback={onNewScanResult}
-          />
-        </div>
+        <HTMLBarCodeScanner
+          fps={10}
+          qrbox={{ width: screenSize.width * 0.75, height: screenSize.width * 0.32 }}
+          qrCodeSuccessCallback={onNewScanResult}
+        />
       </main>
     </div>
   );
